@@ -23,7 +23,8 @@ export default defineNuxtConfig({
         excludes: 'Ploup.ts'
       }
       // './data'
-    ]
+    ],
+    excludes: 'Foo.ts'
     // from: ['./models', './data']
     // from: './models'
   }
