@@ -90,7 +90,9 @@ const adapt = (params: any) => {
             ? [item.dirs]
             : [].concat(...item.dirs),
         excludes: [
-          ...params.excludes,
+          ...typeof params.excludes === 'string'
+            ? [params.excludes]
+            : params.excludes,
           ...item.excludes
             ? typeof item.excludes === 'string'
               ? [item.excludes]
@@ -114,7 +116,7 @@ export default defineNuxtModule<ModuleOptions>({
   // Defaults
   defaults: nuxt => ({
     from: [],
-    excludes: ['index.ts']
+    excludes: []
   }),
 
   setup (options, nuxt) {
@@ -125,6 +127,10 @@ export default defineNuxtModule<ModuleOptions>({
       from: dirPath|Array<dirPath|fromItem>,
       excludes: fileNameWithExtension|Array<fileNameWithExtension>
     } = options
+
+    options.excludes = typeof options.excludes === 'string'
+      ? [options.excludes, 'index.ts']
+      : [...options.excludes, 'index.ts']
 
     const adapted = adapt(options)
 
@@ -147,7 +153,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     console.log({
       allFroms
-    });
+    })
     // return
 
     const watcher = chokidar.watch(allFroms, { ignored: /^\./, persistent: true })
