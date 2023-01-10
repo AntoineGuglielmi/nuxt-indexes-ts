@@ -10,24 +10,14 @@ type dirPath = string
 type fileNameWithExtension = string
 
 interface fromItem {
-  dirs: [dirPath],
-  excludes?: [fileNameWithExtension]
+  dirs: dirPath|Array<dirPath>,
+  excludes?: fileNameWithExtension|Array<fileNameWithExtension>
 }
 
 interface ModuleOptions {
-  from: (dirPath|fromItem)[],
-  excludes: [fileNameWithExtension]
+  from: dirPath|Array<dirPath|fromItem>,
+  excludes: Array<fileNameWithExtension>
 }
-
-const d = (debug: any) => {
-  console.log({
-    debug: JSON.stringify(debug, null, 2)
-  })
-}
-
-// interface ModuleOptions {
-//   addPlugin: boolean
-// }
 
 /**
  * Generate an index.ts file in dir folder, excluding excludes items from exports
@@ -122,7 +112,7 @@ export default defineNuxtModule<ModuleOptions>({
   setup (options, nuxt) {
     const {
       from: fromPackages,
-      excludes: globalExcludes
+      excludes
     }: {
       from: dirPath|Array<dirPath|fromItem>,
       excludes: fileNameWithExtension|Array<fileNameWithExtension>
@@ -134,13 +124,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     const adapted = adapt(options)
 
-    for (const ad of adapted) {
-      console.log({
-        ad
-      })
-    }
-    // return
-
     const allFroms: dirPath|Array<dirPath> = typeof fromPackages === 'string'
       ? fromPackages
       : ([] as Array<dirPath>).concat(...fromPackages.map((from: dirPath|fromItem) => {
@@ -150,11 +133,6 @@ export default defineNuxtModule<ModuleOptions>({
               ? [from.dirs]
               : from.dirs
         }))
-
-    console.log({
-      allFroms
-    })
-    // return
 
     const watcher = chokidar.watch(allFroms, { ignored: /^\./, persistent: true })
     const watchNuxtConfig = chokidar.watch('./playground/nuxt.config.ts', { ignored: /^\./, persistent: true })
