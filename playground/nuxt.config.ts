@@ -7,5 +7,24 @@ export default defineNuxtConfig({
   ],
   myModule: {
     addPlugin: true
+  },
+  indexes: {
+    from: [
+      {
+        dirs: ['./playground/models', './playground/store'],
+        excludes: ['(.*).old.ts']
+      },
+      {
+        dirs: ['./playground/composables'],
+        excludes: 'useNot.ts'
+      },
+      {
+        dirs: './playground/data',
+        excludes: 'Ploup.ts'
+      }
+      // './data'
+    ]
+    // from: ['./models', './data']
+    // from: './models'
   }
 })
