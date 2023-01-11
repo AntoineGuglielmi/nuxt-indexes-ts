@@ -105,7 +105,7 @@ export default defineNuxtModule<ModuleOptions>({
   // Defaults
   defaults: nuxt => ({
     from: [],
-    ignore: []
+    ignoreAll: []
   }),
 
   setup (options, nuxt) {
