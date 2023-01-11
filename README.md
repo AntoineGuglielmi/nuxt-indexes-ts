@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   ],
   indexes: {
     from: ...,
-    ignore: ...
+    ignoreAll: ...
   }
 })
 ```
@@ -81,19 +81,19 @@ from: [
 ```
 <br>  
 
-### The `ignore` option
-The `ignore` option key gives all files that will be ignored for all directories  
+### The `ignoreAll` option
+The `ignoreAll` option key gives all files that will be ignored for all directories
 indicated in `from` option key. By default, all `index.ts` files are ignored.  
 It can be a single string or an array of string:
 ```typescript
 // Will exclude all dolor.ts file
-ignore: 'dolor.ts'
+ignoreAll: 'dolor.ts'
 
 // OR
 
 // Will exclude all sit.ts and all amet.ts files
-ignore: ['sit.ts', 'amet.ts']
+ignoreAll: ['sit.ts', 'amet.ts']
 
 // By default
-ignore: ['index.ts']
+ignoreAll: ['index.ts']
 ```
