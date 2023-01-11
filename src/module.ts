@@ -15,7 +15,7 @@ interface fromItem {
 
 interface ModuleOptions {
   from: dirPath|Array<dirPath|fromItem>,
-  ignore: Array<fileNameWithExtension>
+  ignoreAll: Array<fileNameWithExtension>
 }
 
 /**
@@ -64,9 +64,9 @@ const adapt = (params: any) => {
   if (typeof params.from === 'string') {
     return [{
       dirs: [params.from],
-      ignore: typeof params.ignore === 'string'
-        ? [params.ignore]
-        : [].concat(...params.ignore.map((item: any) => {
+      ignore: typeof params.ignoreAll === 'string'
+        ? [params.ignoreAll]
+        : [].concat(...params.ignoreAll.map((item: any) => {
             return [item]
           }))
     }]
@@ -79,9 +79,9 @@ const adapt = (params: any) => {
             ? [item.dirs]
             : [].concat(...item.dirs),
         ignore: [
-          ...typeof params.ignore === 'string'
-            ? [params.ignore]
-            : params.ignore,
+          ...typeof params.ignoreAll === 'string'
+            ? [params.ignoreAll]
+            : params.ignoreAll,
           ...item.ignore
             ? typeof item.ignore === 'string'
               ? [item.ignore]
@@ -111,15 +111,15 @@ export default defineNuxtModule<ModuleOptions>({
   setup (options, nuxt) {
     const {
       from: fromPackages,
-      ignore
+      ignoreAll
     }: {
       from: dirPath|Array<dirPath|fromItem>,
-      ignore: fileNameWithExtension|Array<fileNameWithExtension>
+      ignoreAll: fileNameWithExtension|Array<fileNameWithExtension>
     } = options
 
-    options.ignore = typeof options.ignore === 'string'
-      ? [options.ignore, 'index.ts']
-      : [...options.ignore, 'index.ts']
+    options.ignoreAll = typeof options.ignoreAll === 'string'
+      ? [options.ignoreAll, 'index.ts']
+      : [...options.ignoreAll, 'index.ts']
 
     const adapted = adapt(options)
 

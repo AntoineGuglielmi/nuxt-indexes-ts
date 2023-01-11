@@ -24,7 +24,7 @@ export default defineNuxtConfig({
       }
       // './data'
     ],
-    ignore: 'Foo.ts'
+    ignoreAll: 'Foo.ts'
     // from: ['./models', './data']
     // from: './models'
   }
