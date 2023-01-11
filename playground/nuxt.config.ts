@@ -12,19 +12,19 @@ export default defineNuxtConfig({
     from: [
       {
         dirs: ['./playground/models', './playground/store'],
-        excludes: ['(.*).old.ts']
+        ignore: ['(.*).old.ts']
       },
       {
         dirs: ['./playground/composables'],
-        excludes: 'useNot.ts'
+        ignore: 'useNot.ts'
       },
       {
         dirs: './playground/data',
-        excludes: 'Ploup.ts'
+        ignore: 'Ploup.ts'
       }
       // './data'
     ],
-    excludes: 'Foo.ts'
+    ignore: 'Foo.ts'
     // from: ['./models', './data']
     // from: './models'
   }

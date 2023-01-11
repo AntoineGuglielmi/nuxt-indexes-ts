@@ -4,36 +4,35 @@ import { parseMap } from 'yaml/util'
 
 const fs = require('fs')
 const chokidar = require('chokidar')
-// const esr = require('escape-string-regexp')
 
 type dirPath = string
 type fileNameWithExtension = string
 
 interface fromItem {
   dirs: dirPath|Array<dirPath>,
-  excludes?: fileNameWithExtension|Array<fileNameWithExtension>
+  ignore?: fileNameWithExtension|Array<fileNameWithExtension>
 }
 
 interface ModuleOptions {
   from: dirPath|Array<dirPath|fromItem>,
-  excludes: Array<fileNameWithExtension>
+  ignore: Array<fileNameWithExtension>
 }
 
 /**
  * Generate an index.ts file in dir folder, excluding excludes items from exports
  * @param dir
- * @param excludes
+ * @param ignore
  */
-const generateIndex = (dir: dirPath, excludes: Array<string>) => {
+const generateIndex = (dir: dirPath, ignore: Array<string>) => {
   if (!fs.existsSync(dir)) { return }
 
-  const excludesRegexpArray = excludes.map((exclude: any) => {
-    return new RegExp(exclude)
+  const ignoreRegexpArray = ignore.map((ignore: any) => {
+    return new RegExp(ignore)
   })
 
   const scanDir = fs.readdirSync(dir)
     .filter((item: string) => {
-      return !excludesRegexpArray.some((regexp: any) => {
+      return !ignoreRegexpArray.some((regexp: any) => {
         return regexp.test(item)
       })
     })
@@ -54,9 +53,9 @@ const generateIndex = (dir: dirPath, excludes: Array<string>) => {
 }
 
 const indexes = (fromPackages: Array<any>) => {
-  for (const { dirs, excludes } of fromPackages) {
+  for (const { dirs, ignore } of fromPackages) {
     for (const dir of dirs) {
-      generateIndex(dir, excludes)
+      generateIndex(dir, ignore)
     }
   }
 }
@@ -65,9 +64,9 @@ const adapt = (params: any) => {
   if (typeof params.from === 'string') {
     return [{
       dirs: [params.from],
-      excludes: typeof params.excludes === 'string'
-        ? [params.excludes]
-        : [].concat(...params.excludes.map((item: any) => {
+      ignore: typeof params.ignore === 'string'
+        ? [params.ignore]
+        : [].concat(...params.ignore.map((item: any) => {
             return [item]
           }))
     }]
@@ -79,14 +78,14 @@ const adapt = (params: any) => {
           : typeof item.dirs === 'string'
             ? [item.dirs]
             : [].concat(...item.dirs),
-        excludes: [
-          ...typeof params.excludes === 'string'
-            ? [params.excludes]
-            : params.excludes,
-          ...item.excludes
-            ? typeof item.excludes === 'string'
-              ? [item.excludes]
-              : item.excludes
+        ignore: [
+          ...typeof params.ignore === 'string'
+            ? [params.ignore]
+            : params.ignore,
+          ...item.ignore
+            ? typeof item.ignore === 'string'
+              ? [item.ignore]
+              : item.ignore
             : []
         ]
       })
@@ -106,21 +105,21 @@ export default defineNuxtModule<ModuleOptions>({
   // Defaults
   defaults: nuxt => ({
     from: [],
-    excludes: []
+    ignore: []
   }),
 
   setup (options, nuxt) {
     const {
       from: fromPackages,
-      excludes
+      ignore
     }: {
       from: dirPath|Array<dirPath|fromItem>,
-      excludes: fileNameWithExtension|Array<fileNameWithExtension>
+      ignore: fileNameWithExtension|Array<fileNameWithExtension>
     } = options
 
-    options.excludes = typeof options.excludes === 'string'
-      ? [options.excludes, 'index.ts']
-      : [...options.excludes, 'index.ts']
+    options.ignore = typeof options.ignore === 'string'
+      ? [options.ignore, 'index.ts']
+      : [...options.ignore, 'index.ts']
 
     const adapted = adapt(options)
 
