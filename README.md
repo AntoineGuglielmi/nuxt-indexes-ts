@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   ],
   indexes: {
     from: ...,
-    excludes: ...
+    ignoreAll: ...
   }
 })
 ```
@@ -47,14 +47,14 @@ from: ['./foo', './bar']
 from: [
   {
     dirs: ...,
-    excludes?: ...
+    ignore?: ...
   }
 ]
 ```
-The `dirs` and `excludes` keys (`excludes` is optional) in object can be a single string
+The `dirs` and `ignore` keys (`ignore` is optional) in object can be a single string
 or an array of strings.  
 `dirs` is pointing to each directory you want to target.  
-`excludes` gives all files that will be ignored in these directories. 
+`ignore` gives all files that will be ignored in these directories. 
 
 ```typescript
 from: [
@@ -69,31 +69,31 @@ from: [
   // Will watch inside ./foo directory, ignoring baz.ts file only in ./foo directory
   {
     dirs: ['./foo'],
-    excludes: 'baz.ts'
+    ignore: 'baz.ts'
   },
   // Will watch inside ./foo and ./bar directories, ignoring ipsum.ts file
   // and all files matching the regexp (.*).old.ts in both ./foo and ./bar directories
   {
     dirs: ['./foo', './bar'],
-    excludes: ['ipsum.ts', '(.*).old.ts']
+    ignore: ['ipsum.ts', '(.*).old.ts']
   },
 ]
 ```
 <br>  
 
-### The `excludes` option
-The `excludes` option key gives all files that will be ignored for all directories  
+### The `ignoreAll` option
+The `ignoreAll` option key gives all files that will be ignored for all directories
 indicated in `from` option key. By default, all `index.ts` files are ignored.  
 It can be a single string or an array of string:
 ```typescript
 // Will exclude all dolor.ts file
-excludes: 'dolor.ts'
+ignoreAll: 'dolor.ts'
 
 // OR
 
 // Will exclude all sit.ts and all amet.ts files
-excludes: ['sit.ts', 'amet.ts']
+ignoreAll: ['sit.ts', 'amet.ts']
 
 // By default
-excludes: ['index.ts']
+ignoreAll: ['index.ts']
 ```
